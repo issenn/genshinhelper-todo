@@ -1,0 +1,85 @@
+name: "Sync"
+
+on:
+  workflow_dispatch:  # 手动触发
+  schedule:  # 计划任务触发
+    - cron: '10 16 * * *'  # scheduled at 00:10 (UTC+8) everyday
+  push:
+    branches:
+      - master
+  pull_request:
+    branches:
+      - master
+  watch:
+    types: [started]
+
+env:
+  TZ: 'Asia/Shanghai'
+
+jobs:
+  sync:
+    name: sync
+    if: github.event.repository.owner.id == github.event.sender.id
+    runs-on: ubuntu-18.04
+
+    steps:
+      - name: Checkout sync repo
+        uses: actions/checkout@v2
+        with:
+          ref: master
+          token: ${{ secrets.ACCESS_TOKEN || github.token }}
+
+      - name: Sync with upstream
+        if: github.repository != 'issenn/genshinhelper-todo'
+        uses: aormsby/Fork-Sync-With-Upstream-action@v2.3
+        with:
+          upstream_repository: issenn/genshinhelper-todo
+          upstream_branch: master
+          target_branch: master
+          git_pull_args: '-s recursive -Xtheirs'
+          github_token: ${{ secrets.ACCESS_TOKEN || github.token }}
+
+  sync-genshin-mys-checkin:
+    name: sync
+    if: github.event.repository.owner.id == github.event.sender.id
+    runs-on: ubuntu-18.04
+
+    steps:
+      - name: Checkout sync repo
+        uses: actions/checkout@v2
+        with:
+          ref: genshinhelper
+          token: ${{ secrets.ACCESS_TOKEN || github.token }}
+
+      - name: Sync with upstream
+        if: github.repository != 'y1ndan/genshinhelper'
+        uses: aormsby/Fork-Sync-With-Upstream-action@v2.3
+        with:
+          upstream_repository: y1ndan/genshinhelper
+          upstream_branch: main
+          target_branch: genshinhelper
+          git_pull_args: '-s recursive -Xtheirs'
+          github_token: ${{ secrets.ACCESS_TOKEN || github.token }}
+
+  sync-genshin-mys-checkin-w:
+    name: sync
+    if: github.event.repository.owner.id == github.event.sender.id
+    runs-on: ubuntu-18.04
+
+    steps:
+      - name: Checkout sync repo
+        uses: actions/checkout@v2
+        with:
+          ref: genshin-mys-checkin
+          token: ${{ secrets.ACCESS_TOKEN || github.token }}
+
+      - name: Sync with upstream
+        if: github.repository != 'Tsuk1ko/genshin-mys-checkin'
+        uses: aormsby/Fork-Sync-With-Upstream-action@v2.3
+        with:
+          upstream_repository: Tsuk1ko/genshin-mys-checkin
+          upstream_branch: main
+          target_branch: genshin-mys-checkin
+          git_pull_args: '-s recursive -Xtheirs'
+          github_token: ${{ secrets.ACCESS_TOKEN || github.token }}
+

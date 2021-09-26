@@ -32,7 +32,7 @@ jobs:
       - name: Checkout master
         uses: actions/checkout@v2
         with:
-          repository: y1ndan/genshinhelper
+          # repository: y1ndan/genshinhelper
           ref: 'genshinhelper'
           # path: 'genshinhelper'
           token: ${{ secrets.ACCESS_TOKEN || github.token }}
@@ -76,7 +76,7 @@ jobs:
       - name: Checkout master
         uses: actions/checkout@v2
         with:
-          repository: Tsuk1ko/genshin-mys-checkin
+          # repository: Tsuk1ko/genshin-mys-checkin
           ref: 'genshin-mys-checkin'
           # path: 'genshin-mys-checkin'
           token: ${{ secrets.ACCESS_TOKEN || github.token }}
